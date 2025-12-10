@@ -37,10 +37,11 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=600s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
 # Start vLLM OpenAI-compatible server with AutoGLM-specific parameters
-# vLLM 0.12+ uses new CLI syntax: "vllm serve <model>" instead of "python3 -m vllm.entrypoints.openai.api_server --model <model>"
-# Model is now a positional argument (3rd element) instead of --model flag
+# IMPORTANT: vllm/vllm-openai image has ENTRYPOINT ["vllm", "serve"]
+# So CMD only needs to provide the model (as positional arg) and other flags
+# Final command: vllm serve zai-org/AutoGLM-Phone-9B --served-model-name ...
 # vLLM will automatically download the model from Hugging Face on first start
-CMD ["vllm", "serve", "zai-org/AutoGLM-Phone-9B", \
+CMD ["zai-org/AutoGLM-Phone-9B", \
      "--served-model-name", "autoglm-phone-9b", \
      "--allowed-local-media-path", "/", \
      "--mm-encoder-tp-mode", "data", \
