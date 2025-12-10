@@ -1,4 +1,4 @@
-.PHONY: help run run-task list-apps test-adb
+.PHONY: help run run-task list-apps test-adb adb-restart
 .DEFAULT_GOAL := help
 
 # Get RunPod URL from runpod_serve directory
@@ -84,6 +84,15 @@ test-adb: ## Test ADB connection to device/emulator
 		exit 1; \
 	fi
 	@echo "✅ ADB installed"
+	@echo ""
+	@echo "Connected devices:"
+	@adb devices
+
+adb-restart: ## Restart ADB server to fix connection issues
+	@echo "Restarting ADB server..."
+	@adb kill-server
+	@adb start-server
+	@echo "✅ ADB server restarted"
 	@echo ""
 	@echo "Connected devices:"
 	@adb devices
